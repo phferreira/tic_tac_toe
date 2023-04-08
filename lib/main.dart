@@ -25,33 +25,45 @@ class MainApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(28.0),
           child: Center(
-            child: Table(
-              border: TableBorder.symmetric(
-                inside: BorderSide.none,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Table(
+                    border: TableBorder.symmetric(
+                      inside: BorderSide.none,
+                    ),
+                    children: [
+                      TableRow(
+                        children: [
+                          Campo(key: const Key('1'), controller: controller),
+                          Campo(key: const Key('2'), controller: controller),
+                          Campo(key: const Key('3'), controller: controller),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Campo(key: const Key('4'), controller: controller),
+                          Campo(key: const Key('5'), controller: controller),
+                          Campo(key: const Key('6'), controller: controller),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Campo(key: const Key('7'), controller: controller),
+                          Campo(key: const Key('8'), controller: controller),
+                          Campo(key: const Key('9'), controller: controller),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.zerarJogo();
+                    },
+                    child: const Text('Reiniciar'),
+                  )
+                ],
               ),
-              children: [
-                TableRow(
-                  children: [
-                    Campo(key: const Key('1'), controller: controller),
-                    Campo(key: const Key('2'), controller: controller),
-                    Campo(key: const Key('3'), controller: controller),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Campo(key: const Key('4'), controller: controller),
-                    Campo(key: const Key('5'), controller: controller),
-                    Campo(key: const Key('6'), controller: controller),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Campo(key: const Key('7'), controller: controller),
-                    Campo(key: const Key('8'), controller: controller),
-                    Campo(key: const Key('9'), controller: controller),
-                  ],
-                ),
-              ],
             ),
           ),
         ),

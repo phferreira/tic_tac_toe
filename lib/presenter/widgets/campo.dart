@@ -17,14 +17,12 @@ class _CampoState extends State<Campo> {
 
   @override
   Widget build(BuildContext context) {
-    bool print = false;
     int key = int.parse(widget.key.toString().replaceAll(RegExp(r'\D'), ''));
 
     return GestureDetector(
       onTap: () {
-        if (!print) {
+        if (widget.controller.getCampo(key).isEmpty) {
           widget.controller.setCampo(key);
-          print = true;
         }
       },
       child: AnimatedBuilder(
