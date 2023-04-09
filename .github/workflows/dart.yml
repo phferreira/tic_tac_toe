@@ -35,7 +35,7 @@ jobs:
          git config --global user.name phferreira
          git status
          git remote add origin https://${{secrets.commit_secret}}@github.com/phferreira/tic_tac_toe.git
-         git checkout -b gh-pages
+         git checkout -b gh-pages-ttt
          git add --all
          git commit -m "Update from CI/CD"
-         git push origin gh-pages -f
+         git push origin gh-pages-ttt -f
