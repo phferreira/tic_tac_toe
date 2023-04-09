@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/presenter/controllers/game_controller.dart';
 
 class Campo extends StatefulWidget {
-  // final String letter;
-  // final String Function(String args) onTap;
   final GameController controller;
 
   const Campo({super.key, required this.controller});
@@ -13,14 +11,13 @@ class Campo extends StatefulWidget {
 }
 
 class _CampoState extends State<Campo> {
-  // bool _print = false;
-
   @override
   Widget build(BuildContext context) {
     int key = int.parse(widget.key.toString().replaceAll(RegExp(r'\D'), ''));
 
     return GestureDetector(
       onTap: () {
+        debugPrint('clicou');
         if (widget.controller.getCampo(key).isEmpty) {
           widget.controller.setCampo(key);
         }
@@ -31,23 +28,16 @@ class _CampoState extends State<Campo> {
           return Container(
             width: 100,
             height: 200,
-            color: Colors.red,
+            color: Colors.white,
             child: Center(
               child: Text(
                 widget.controller.getCampo(key),
-                style: const TextStyle(fontSize: 64),
+                style: const TextStyle(fontSize: 64, color: Colors.black),
               ),
             ),
           );
         },
       ),
-      // child: _print
-      //     ? Text(
-      //         _letter,
-      //         style: const TextStyle(fontSize: 64),
-      //       )
-      //     : null),
-      // ),
     );
   }
 }

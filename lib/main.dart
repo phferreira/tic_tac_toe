@@ -12,12 +12,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String printLetter(String args) {
-    //   controller.setCampo(int.parse(args));
-    //
-    //   return ;
-    //   // return args;
-    // }
     final GameController controller = GameController();
 
     return MaterialApp(
@@ -30,7 +24,9 @@ class MainApp extends StatelessWidget {
                 children: [
                   Table(
                     border: TableBorder.symmetric(
-                      inside: BorderSide.none,
+                      inside: const BorderSide(
+                        width: 2,
+                      ),
                     ),
                     children: [
                       TableRow(
