@@ -37,5 +37,5 @@ jobs:
          git remote add origin https://${{secrets.commit_secret}}@github.com/phferreira/tic_tac_toe.git
          git checkout -b gh-pages
          git add --all
-         git commit -m "Update from tic_tac_toe.git"
+         git commit -m "Update from CI/CD"
          git push origin gh-pages -f
