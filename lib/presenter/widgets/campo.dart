@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/presenter/controllers/game_controller.dart';
 
 class Campo extends StatefulWidget {
-  // final String letter;
-  // final String Function(String args) onTap;
   final GameController controller;
 
   const Campo({super.key, required this.controller});
