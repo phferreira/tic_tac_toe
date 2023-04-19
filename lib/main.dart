@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:tic_tac_toe/presenter/controllers/game_controller.dart';
-
 import 'presenter/widgets/campo.dart';
 
 void main() {
+  setUrlStrategy(PathUrlStrategy());
+
   runApp(const MainApp());
 }
 
