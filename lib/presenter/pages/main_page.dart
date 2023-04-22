@@ -13,6 +13,12 @@ class _MainPageState extends State<MainPage> {
   final GameController controller = GameController();
 
   @override
+  void initState() {
+    controller.getDados();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(

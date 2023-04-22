@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 enum CampoEnum {
@@ -20,6 +21,7 @@ class GameController extends ChangeNotifier {
   CampoEnum currentValue = CampoEnum.cNenhum;
   StatusEnum currentStatus = StatusEnum.sNothing;
   final List<int> fieldsWin = [];
+  final database = FirebaseDatabase.instance.reference();
 
   final Map<int, CampoEnum> campo = {
     1: CampoEnum.cNenhum,
@@ -33,8 +35,28 @@ class GameController extends ChangeNotifier {
     9: CampoEnum.cNenhum,
   };
 
+  void getDados() {
+    database.onValue.listen((event) {
+      final data = event.snapshot.child('campo').children;
+      for (var value in data) {
+        if (value.value.toString() == 'X') {
+          campo[int.parse(value.key.toString())] = CampoEnum.cCruz;
+        } else if (value.value.toString() == 'O') {
+          campo[int.parse(value.key.toString())] = CampoEnum.cCirculo;
+        } else {
+          campo[int.parse(value.key.toString())] = CampoEnum.cNenhum;
+        }
+      }
+      notifyListeners();
+    });
+  }
+
   void zerarJogo() {
-    campo.updateAll((key, value) => value = CampoEnum.cNenhum);
+    campo.updateAll((key, value) {
+      database.child('campo').child('$key').set('');
+      return value = CampoEnum.cNenhum;
+    });
+
     currentStatus = StatusEnum.sNothing;
     fieldsWin.clear();
     notifyListeners();
@@ -43,7 +65,7 @@ class GameController extends ChangeNotifier {
   void setCampo(int key) {
     currentValue = currentValue == CampoEnum.cCirculo ? CampoEnum.cCruz : CampoEnum.cCirculo;
     campo.update(key, (value) => currentValue);
-    debugPrint(currentValue.name);
+    database.child('campo').child('$key').set(currentValue.name);
     verifyStatusGame();
     notifyListeners();
   }
