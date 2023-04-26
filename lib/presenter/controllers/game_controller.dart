@@ -21,7 +21,7 @@ class GameController extends ChangeNotifier {
   CampoEnum currentValue = CampoEnum.cNenhum;
   StatusEnum currentStatus = StatusEnum.sNothing;
   final List<int> fieldsWin = [];
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.ref();
 
   final Map<int, CampoEnum> campo = {
     1: CampoEnum.cNenhum,
