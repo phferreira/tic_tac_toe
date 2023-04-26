@@ -36,9 +36,12 @@ class GameController extends ChangeNotifier {
   };
 
   void getDados() {
-    database.onValue.listen((event) {
-      final data = event.snapshot.child('campo').children;
-      for (var value in data) {
+    database.child('campo').child('currentStatus').onValue.listen((event) {});
+    database.child('campo').child('currentValue').onValue.listen((event) {
+      currentValue = event.snapshot.value.toString() == CampoEnum.cCirculo.name ? CampoEnum.cCruz : CampoEnum.cCirculo;
+    });
+    database.child('campo').child('campos').onValue.listen((event) {
+      for (var value in event.snapshot.children) {
         if (value.value.toString() == 'X') {
           campo[int.parse(value.key.toString())] = CampoEnum.cCruz;
         } else if (value.value.toString() == 'O') {
@@ -47,13 +50,15 @@ class GameController extends ChangeNotifier {
           campo[int.parse(value.key.toString())] = CampoEnum.cNenhum;
         }
       }
+
+      verifyStatusGame();
       notifyListeners();
     });
   }
 
   void zerarJogo() {
     campo.updateAll((key, value) {
-      database.child('campo').child('$key').set('');
+      database.child('campo').child('campos').child('$key').set('');
       return value = CampoEnum.cNenhum;
     });
 
@@ -62,10 +67,10 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCampo(int key) {
-    currentValue = currentValue == CampoEnum.cCirculo ? CampoEnum.cCruz : CampoEnum.cCirculo;
+  void setCampo(int key) async {
     campo.update(key, (value) => currentValue);
-    database.child('campo').child('$key').set(currentValue.name);
+    database.child('campo').child('campos').child('$key').set(currentValue.name);
+    database.child('campo').child('currentValue').set(currentValue.name);
     verifyStatusGame();
     notifyListeners();
   }
