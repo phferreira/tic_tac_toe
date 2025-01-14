@@ -66,10 +66,10 @@ class GameController extends ChangeNotifier {
 
   void zerarJogo() {
     campo.updateAll((key, value) {
-      database.child('campo').child('campos').child('$key').set('');
       return value = CampoEnum.cNenhum;
     });
 
+    database.child('campo').child('campos').set('');
     database.child('campo').child('currentStatus').set(StatusEnum.sNothing.index);
   }
 
