@@ -40,15 +40,18 @@ class GameController extends ChangeNotifier {
       currentStatus = StatusEnum.values[int.parse(event.snapshot.value.toString())];
       if (currentStatus == StatusEnum.sNothing) {
         fieldsWin.clear();
+        campo.updateAll((key, value) {
+          return value = CampoEnum.cNenhum;
+        });
       }
-      verifyStatusGame();
       notifyListeners();
     });
+
     database.child('campo').child('currentValue').onValue.listen((event) {
       currentValue = event.snapshot.value.toString() == CampoEnum.cCirculo.name ? CampoEnum.cCruz : CampoEnum.cCirculo;
-      verifyStatusGame();
       notifyListeners();
     });
+
     database.child('campo').child('campos').onValue.listen((event) {
       for (var value in event.snapshot.children) {
         if (value.value.toString() == 'X') {
@@ -65,16 +68,11 @@ class GameController extends ChangeNotifier {
   }
 
   void zerarJogo() {
-    campo.updateAll((key, value) {
-      return value = CampoEnum.cNenhum;
-    });
-
-    database.child('campo').child('campos').set('');
     database.child('campo').child('currentStatus').set(StatusEnum.sNothing.index);
+    database.child('campo').child('campos').set('');
   }
 
   void setCampo(int key) async {
-    campo.update(key, (value) => currentValue);
     database.child('campo').child('campos').child('$key').set(currentValue.name);
     database.child('campo').child('currentValue').set(currentValue.name);
   }
