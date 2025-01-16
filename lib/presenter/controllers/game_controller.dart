@@ -1,12 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-enum CampoEnum {
+enum FieldEnum {
   cNenhum(''),
   cCirculo('O'),
   cCruz('X');
 
-  const CampoEnum(this.name);
+  const FieldEnum(this.name);
   final String name;
 }
 
@@ -19,48 +19,48 @@ enum StatusEnum {
 }
 
 class GameController extends ChangeNotifier {
-  CampoEnum currentValue = CampoEnum.cNenhum;
+  FieldEnum currentValue = FieldEnum.cNenhum;
   StatusEnum currentStatus = StatusEnum.sNothing;
   final List<int> fieldsWin = [];
   final database = FirebaseDatabase.instance.ref();
 
-  final Map<int, CampoEnum> campo = {
-    1: CampoEnum.cNenhum,
-    2: CampoEnum.cNenhum,
-    3: CampoEnum.cNenhum,
-    4: CampoEnum.cNenhum,
-    5: CampoEnum.cNenhum,
-    6: CampoEnum.cNenhum,
-    7: CampoEnum.cNenhum,
-    8: CampoEnum.cNenhum,
-    9: CampoEnum.cNenhum,
+  final Map<int, FieldEnum> table = {
+    1: FieldEnum.cNenhum,
+    2: FieldEnum.cNenhum,
+    3: FieldEnum.cNenhum,
+    4: FieldEnum.cNenhum,
+    5: FieldEnum.cNenhum,
+    6: FieldEnum.cNenhum,
+    7: FieldEnum.cNenhum,
+    8: FieldEnum.cNenhum,
+    9: FieldEnum.cNenhum,
   };
 
   void getDados() {
-    database.child('campo').child('currentStatus').onValue.listen((event) {
+    database.child('table').child('currentStatus').onValue.listen((event) {
       currentStatus = StatusEnum.values[int.parse(event.snapshot.value.toString())];
       if (currentStatus == StatusEnum.sNothing) {
         fieldsWin.clear();
-        campo.updateAll((key, value) {
-          return value = CampoEnum.cNenhum;
+        table.updateAll((key, value) {
+          return value = FieldEnum.cNenhum;
         });
       }
       notifyListeners();
     });
 
-    database.child('campo').child('currentValue').onValue.listen((event) {
-      currentValue = event.snapshot.value.toString() == CampoEnum.cCirculo.name ? CampoEnum.cCruz : CampoEnum.cCirculo;
+    database.child('table').child('currentValue').onValue.listen((event) {
+      currentValue = event.snapshot.value.toString() == FieldEnum.cCirculo.name ? FieldEnum.cCruz : FieldEnum.cCirculo;
       notifyListeners();
     });
 
-    database.child('campo').child('campos').onValue.listen((event) {
+    database.child('table').child('fields').onValue.listen((event) {
       for (var value in event.snapshot.children) {
         if (value.value.toString() == 'X') {
-          campo[int.parse(value.key.toString())] = CampoEnum.cCruz;
+          table[int.parse(value.key.toString())] = FieldEnum.cCruz;
         } else if (value.value.toString() == 'O') {
-          campo[int.parse(value.key.toString())] = CampoEnum.cCirculo;
+          table[int.parse(value.key.toString())] = FieldEnum.cCirculo;
         } else {
-          campo[int.parse(value.key.toString())] = CampoEnum.cNenhum;
+          table[int.parse(value.key.toString())] = FieldEnum.cNenhum;
         }
       }
       verifyStatusGame();
@@ -69,34 +69,34 @@ class GameController extends ChangeNotifier {
   }
 
   void zerarJogo() {
-    database.child('campo').child('currentStatus').set(StatusEnum.sRestart.index);
-    database.child('campo').child('currentStatus').set(StatusEnum.sNothing.index);
-    database.child('campo').child('campos').set('');
+    database.child('table').child('currentStatus').set(StatusEnum.sRestart.index);
+    database.child('table').child('currentStatus').set(StatusEnum.sNothing.index);
+    database.child('table').child('fields').set('');
   }
 
   void setCampo(int key) async {
-    database.child('campo').child('campos').child('$key').set(currentValue.name);
-    database.child('campo').child('currentValue').set(currentValue.name);
+    database.child('table').child('fields').child('$key').set(currentValue.name);
+    database.child('table').child('currentValue').set(currentValue.name);
   }
 
   String getCampo(int key) {
-    return campo[key]!.name;
+    return table[key]!.name;
   }
 
   bool condiction(int a, int b, int c) {
     final List first = [
-      campo[a],
-      campo[b],
-      campo[c],
+      table[a],
+      table[b],
+      table[c],
     ];
 
-    if (first.every((element) => element == CampoEnum.cCirculo)) {
-      database.child('campo').child('currentStatus').set(StatusEnum.sCircleWin.index);
+    if (first.every((element) => element == FieldEnum.cCirculo)) {
+      database.child('table').child('currentStatus').set(StatusEnum.sCircleWin.index);
       fieldsWin.addAll([a, b, c]);
       return true;
     }
-    if (first.every((element) => element == CampoEnum.cCruz)) {
-      database.child('campo').child('currentStatus').set(StatusEnum.sCrossWin.index);
+    if (first.every((element) => element == FieldEnum.cCruz)) {
+      database.child('table').child('currentStatus').set(StatusEnum.sCrossWin.index);
       fieldsWin.addAll([a, b, c]);
       return true;
     }
