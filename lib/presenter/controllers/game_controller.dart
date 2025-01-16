@@ -11,6 +11,7 @@ enum CampoEnum {
 }
 
 enum StatusEnum {
+  sRestart,
   sNothing,
   sDraw,
   sCrossWin,
@@ -68,6 +69,7 @@ class GameController extends ChangeNotifier {
   }
 
   void zerarJogo() {
+    database.child('campo').child('currentStatus').set(StatusEnum.sRestart.index);
     database.child('campo').child('currentStatus').set(StatusEnum.sNothing.index);
     database.child('campo').child('campos').set('');
   }
