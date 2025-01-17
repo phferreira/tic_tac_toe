@@ -22,7 +22,7 @@ class _CampoState extends State<Campo> {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          if ((widget.controller.currentStatus == StatusEnum.sDraw) || (widget.controller.currentStatus == StatusEnum.sNothing)) {
+          if ([StatusEnum.sDraw, StatusEnum.sNothing].contains(widget.controller.currentStatus)) {
             if (widget.controller.getCampo(key).isEmpty) {
               widget.controller.setCampo(key);
             }
@@ -31,7 +31,7 @@ class _CampoState extends State<Campo> {
         child: AnimatedBuilder(
           animation: widget.controller,
           builder: (BuildContext context, Widget? child) {
-            if ((widget.controller.currentStatus != StatusEnum.sDraw) && (widget.controller.currentStatus != StatusEnum.sNothing)) {
+            if (!([StatusEnum.sDraw, StatusEnum.sNothing, StatusEnum.sRestart].contains(widget.controller.currentStatus))) {
               if (widget.controller.fieldsWin.contains(key)) {
                 _color = Colors.red;
                 _textColor = Colors.white;

@@ -39,11 +39,11 @@ class GameController extends ChangeNotifier {
   void getDados() {
     database.child('table').child('currentStatus').onValue.listen((event) {
       currentStatus = StatusEnum.values[int.parse(event.snapshot.value.toString())];
-      if (currentStatus == StatusEnum.sNothing) {
-        fieldsWin.clear();
+      if ([StatusEnum.sNothing, StatusEnum.sRestart].contains(currentStatus)) {
         table.updateAll((key, value) {
           return value = FieldEnum.cNenhum;
         });
+        fieldsWin.clear();
       }
       notifyListeners();
     });
